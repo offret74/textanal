@@ -4,24 +4,10 @@
 
 library(plyr); library(dplyr)
 library(stringr)
-library(KoNLP)
-
-useSejongDic()
 
 setwd("/Users/offret/R")
 
-#txt<-readLines("gokseong.txt")
 txt<-readLines("parasite.txt")
-txt<-str_replace_all(txt,"\\W"," ")
-txt<-gsub("\\d+","",txt)
-txt<-gsub("[A-z]","",txt)
-txt<-gsub("[[:cntrl:]]","",txt)
-
-nouns<-extractNoun(txt)
-
-#추출한 명사 list를 문자열 벡터로 변환, 단어별 빈도표 생성
-#wordcount<-table(unlist(nouns))
-
 
 positive <- readLines("positive.txt", encoding = "UTF-8")
 positive=positive[-1]
@@ -55,9 +41,7 @@ sentimental = function(sentences, positive, negative) {
 }
 
 
-result=sentimental(unlist(nouns), positive, negative)
-#result=sentimental(txt, positive, negative)
-
+result=sentimental(txt, positive, negative)
 
 result$color[result$score >=1] = "blue"
 result$color[result$score ==0] = "green"
