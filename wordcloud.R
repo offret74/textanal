@@ -4,7 +4,8 @@ library(stringr)
 library(RColorBrewer)
 library(wordcloud)
 
-useSejongDic()
+# useSejongDic()
+useNIADic()
 
 setwd("/Users/offret/R")
 
