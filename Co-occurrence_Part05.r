@@ -20,10 +20,12 @@ news_comment <- raw_news_comment %>%
 library(tidytext)
 library(KoNLP)
 
+useNIADic()
+
 comment_pos <- news_comment %>%
-  unnest_tokens(input = reply,
-                output = word,
-                token = SimplePos22,
+  unnest_tokens(input = reply,        # 토큰화할 텍스트
+                output = word,        # 출력 변수명 
+                token = SimplePos22,  # 기준/함수
                 drop = F)
 
 comment_pos %>% 
@@ -80,7 +82,7 @@ comment %>%
   select(word, reply)
 
 
-# -------------------------------------------------------------------------
+# 한번에 하기 -------------------------------------------------------------------------
 comment_new <- comment_pos %>%
   separate_rows(word, sep = "[+]") %>%
   filter(str_detect(word, "/n|/pv|/pa")) %>%
@@ -119,6 +121,11 @@ graph_comment <- pair %>%
 
 graph_comment
 
+# -------------------------------------------------------------------------
+# 폰트 설정 (그래프에 폰트가 안나올 때를 대비)
+library(showtext)
+font_add_google(name = "Nanum Gothic", family = "nanumgothic")
+showtext_auto()
 
 # -------------------------------------------------------------------------
 install.packages("ggraph")
@@ -128,13 +135,6 @@ ggraph(graph_comment) +
   geom_edge_link() +                 # 엣지
   geom_node_point() +                # 노드
   geom_node_text(aes(label = name))  # 텍스트
-
-
-# -------------------------------------------------------------------------
-library(showtext)
-font_add_google(name = "Nanum Gothic", family = "nanumgothic")
-showtext_auto()
-
 
 # -------------------------------------------------------------------------
 set.seed(1234)                              # 난수 고정

@@ -1,4 +1,4 @@
-# KoNLP package installation
+# KoNLP package installation (only one time)
 # --------------------------------------------------------------------
 
 install.packages("multilinguer")
@@ -13,7 +13,7 @@ remotes::install_github("haven-jeon/KoNLP",
                         upgrade = "never",
                         INSTALL_opts = c("--no-multiarch"))
 
-# -------------------------------------------------------------------------
+# start --------------------------------------------------------------------
 
 library(KoNLP)
 
@@ -71,14 +71,24 @@ word_noun
 
 
 # -------------------------------------------------------------------------
-# 상위 20개 단어 추출
+# 상위 50개 단어 추출
 top50 <- word_noun %>%
-  head(100)
+  head(50)
+
+top50
 
 # delete non-Noun word
 
 wordlist <- top50[c(-1, -6, -14, -16),]
 # wordlist <- wordlist %>% head(30)
+
+# -------------------------------------------------------------------------
+# 폰트 설정
+library(showtext)
+font_add_google(name = "Nanum Gothic", family = "nanumgothic")
+font_add_google(name = "Black Han Sans", family = "blackhansans")
+showtext_auto()
+
 
 # 막대 그래프 만들기
 library(ggplot2)
@@ -87,20 +97,18 @@ ggplot(wordlist, aes(x = reorder(word, n), y = n)) +
   coord_flip() +
   geom_text(aes(label = n), hjust = -0.3) +
   labs(x = NULL) +
-  theme(text = element_text(family = "AppleGothic"))
+  theme(text = element_text(family = "nanumgothic"))
 
-# -------------------------------------------------------------------------
-# 폰트 설정
-library(showtext)
-font_add_google(name = "Black Han Sans", family = "blackhansans")
-showtext_auto()
+
 
 
 # wordcloud 1 --------------------------------------------------------------------
 library(RColorBrewer)
 library(wordcloud)
 
-pal <- brewer.pal(8,"Set2") #색깔지정
+display.brewer.all() # Palette 확인
+
+pal <- brewer.pal(8,"Dark2") #색깔지정
 wordcloud(words = wordlist$word,  # 단어
           freq = wordlist$n,   # 빈도
           min.freq = 2,          # 최소 단어 빈도
